@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>WT Lecture Program</title>
+
+<style>
+body{
+font-family: Arial;
+text-align:center;
+background:#f5dede;
+padding:20px;
+}
+
+button{
+padding:10px 15px;
+margin:5px;
+background:#007BFF;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#023062;
+}
+
+table{
+border-collapse:collapse;
+margin:auto;
+margin-top:20px;
+width:60%;
+background:white;
+}
+
+th,td{
+border:1px solid black;
+padding:10px;
+}
+
+th{
+background:#007BFF;
+color:white;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>Student Array Operations</h2>
+
+<button onclick="printNames()">Print All Names</button>
+<button onclick="marksAbove80()">Marks > 80</button>
+<button onclick="countCourses()">Count Courses</button>
+<button onclick="showCSE()">Only CSE Students</button>
+
+<br><br>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Marks</th>
+<th>Course</th>
+</tr>
+</thead>
+
+<tbody id="tableBody"></tbody>
+</table>
+
+<h2>Market Products</h2>
+
+<button onclick="checkExpensive()">Check Expensive Product (some)</button>
+<button onclick="totalPrice()">Total Price (reduce)</button>
+
+<p id="result"></p>
+
+<script src="script.js"></script>
+
+</body>
+</html>
