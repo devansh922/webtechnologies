@@ -54,6 +54,28 @@ nav {
     background-color: #e4240a;
 }
 
+.box:nth-child(7) {
+    background-color: #9b59b6;
+}
+
+.box:nth-child(8) {
+    background-color: #9b59b6;
+}
+
+.box:nth-child(9) {
+    background-color: #817f81;
+}
+
+.box:nth-child(10) {
+    background-color: #76b659;
+}
+
+.box:nth-child(7) {
+    background-color: #6759b6;
+}
+
+
+
 .box:hover {
     transform: scale(1.1);
     opacity: 0.8;
