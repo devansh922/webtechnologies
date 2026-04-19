@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xpense — Track What Matters</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <span class="logo-icon">₹</span>
+            <span class="logo-text">Xpense</span>
+        </div>
+
+        <nav class="nav">
+            <button class="nav-item active" data-view="dashboard">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                Dashboard
+            </button>
+            <button class="nav-item" data-view="expenses">
+                <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                All Expenses
+            </button>
+            <button class="nav-item" data-view="add">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Add Expense
+            </button>
+        </nav>
+
+        <div class="sidebar-month">
+            <label>Viewing</label>
+            <input type="month" id="monthFilter" value="">
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <div class="dark-mode-toggle" id="darkModeToggle" title="Toggle Dark Mode">
+            <div class="toggle-track">
+                <span class="toggle-icon">☀️</span>
+                <span class="toggle-icon">🌙</span>
+                <div class="toggle-thumb"></div>
+            </div>
+            <span class="toggle-label">Dark Mode</span>
+        </div>
+
+        <div class="sidebar-user">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-info">
+                <div class="user-name" id="userName">User</div>
+                <div class="user-email" id="userEmail">user@email.com</div>
+            </div>
+            <button class="logout-btn" id="logoutBtn" title="Logout">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <button class="hamburger" id="hamburger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="mobile-logo">₹ Xpense</span>
+        <button class="mobile-dark-toggle" id="mobileDarkToggle">🌙</button>
+    </header>
+
+    <!-- Sidebar Overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- DASHBOARD VIEW -->
+        <section class="view active" id="view-dashboard">
+            <div class="page-header">
+                <h1>Overview</h1>
+                <p class="subtitle" id="dashSubtitle">Loading...</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card accent">
+                    <div class="stat-label">Total Spent</div>
+                    <div class="stat-value" id="totalSpent">₹0.00</div>
+                    <div class="stat-sub" id="totalCount">0 transactions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Highest Category</div>
+                    <div class="stat-value" id="topCategory">—</div>
+                    <div class="stat-sub" id="topAmount">₹0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Daily Average</div>
+                    <div class="stat-value" id="dailyAvg">₹0</div>
+                    <div class="stat-sub">this month</div>
+                </div>
+                <div class="stat-card budget-card">
+                    <div class="stat-label">Monthly Budget</div>
+                    <div class="stat-value" id="budgetDisplay">Not Set</div>
+                    <div class="stat-sub" id="budgetStatus">
+                        <button class="set-budget-btn" id="setBudgetBtn">Set Budget</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget Progress Bar -->
+            <div class="budget-progress-wrap" id="budgetProgressWrap" style="display:none">
+                <div class="budget-progress-label">
+                    <span id="budgetProgressText">Budget Usage</span>
+                    <span id="budgetProgressPct">0%</span>
+                </div>
+                <div class="budget-progress-track">
+                    <div class="budget-progress-fill" id="budgetProgressFill"></div>
+                </div>
+            </div>
+
+            <div class="dashboard-lower">
+                <div class="chart-card">
+                    <h3>Spending by Category</h3>
+                    <div class="chart-area" id="categoryChart"></div>
+                </div>
+                <div class="recent-card">
+                    <h3>Recent Transactions</h3>
+                    <div id="recentList" class="recent-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ALL EXPENSES VIEW -->
+        <section class="view" id="view-expenses">
+            <div class="page-header">
+                <h1>All Expenses</h1>
+                <div class="filter-row">
+                    <!-- Search Box -->
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="searchInput" placeholder="Search expenses..." />
+                    </div>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="All">All Categories</option>
+                        <option>Food & Dining</option>
+                        <option>Transport</option>
+                        <option>Shopping</option>
+                        <option>Entertainment</option>
+                        <option>Health</option>
+                        <option>Education</option>
+                        <option>Bills & Utilities</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+            </div>
+            <div id="expensesList" class="expenses-table-wrap">
+                <div class="loading-state">Loading expenses...</div>
+            </div>
+        </section>
+
+        <!-- ADD EXPENSE VIEW -->
+        <section class="view" id="view-add">
+            <div class="page-header">
+                <h1>Add Expense</h1>
+                <p class="subtitle">Record a new transaction</p>
+            </div>
+            <div class="form-card">
+                <div class="form-group">
+                    <label for="expTitle">Title *</label>
+                    <input type="text" id="expTitle" placeholder="e.g. Lunch at Cafe Coffee Day" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expAmount">Amount (₹) *</label>
+                        <input type="number" id="expAmount" placeholder="0.00" min="0" step="0.01" />
+                    </div>
+                    <div class="form-group">
+                        <label for="expDate">Date *</label>
+                        <input type="date" id="expDate" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Category *</label>
+                    <div class="category-pills" id="categoryPills">
+                        <button class="pill" data-cat="Food & Dining">🍽 Food & Dining</button>
+                        <button class="pill" data-cat="Transport">🚌 Transport</button>
+                        <button class="pill" data-cat="Shopping">🛍 Shopping</button>
+                        <button class="pill" data-cat="Entertainment">🎬 Entertainment</button>
+                        <button class="pill" data-cat="Health">💊 Health</button>
+                        <button class="pill" data-cat="Education">📚 Education</button>
+                        <button class="pill" data-cat="Bills & Utilities">💡 Bills & Utilities</button>
+                        <button class="pill" data-cat="Other">📦 Other</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="expNote">Note (optional)</label>
+                    <textarea id="expNote" placeholder="Any additional details..."></textarea>
+                </div>
+                <div id="formError" class="form-error hidden"></div>
+                <button class="submit-btn" id="submitExpense">
+                    <span>Add Expense</span>
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+                <div id="formSuccess" class="form-success hidden">✓ Expense added successfully!</div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- Budget Modal -->
+<div class="modal-overlay" id="budgetModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Set Monthly Budget</h3>
+            <button class="modal-close" id="closeBudgetModal">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Budget Amount (₹)</label>
+                <input type="number" id="budgetInput" placeholder="e.g. 10000" min="0" step="100" />
+            </div>
+            <div style="display:flex;gap:10px;margin-top:16px">
+                <button class="submit-btn" id="saveBudgetBtn" style="flex:1">
+                    <span>Save Budget</span>
+                </button>
+                <button class="submit-btn" id="clearBudgetBtn" style="flex:1;background:var(--ink-muted)">
+                    <span>Clear Budget</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Expense Modal -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Edit Expense</h3>
+            <button class="modal-close" id="closeEditModal">✕</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editId" />
+            <div class="form-group">
+                <label>Title *</label>
+                <input type="text" id="editTitle" placeholder="Expense title" />
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Amount (₹) *</label>
+                    <input type="number" id="editAmount" placeholder="0.00" min="0" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="date" id="editDate" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Category *</label>
+                <select id="editCategory" class="filter-select" style="width:100%">
+                    <option>Food & Dining</option>
+                    <option>Transport</option>
+                    <option>Shopping</option>
+                    <option>Entertainment</option>
+                    <option>Health</option>
+                    <option>Education</option>
+                    <option>Bills & Utilities</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Note</label>
+                <textarea id="editNote" placeholder="Any additional details..."></textarea>
+            </div>
+            <div id="editError" class="form-error hidden"></div>
+            <button class="submit-btn" id="saveEditBtn" style="width:100%;margin-top:8px">
+                <span>Save Changes</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
